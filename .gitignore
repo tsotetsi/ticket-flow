@@ -1,0 +1,9 @@
+# Python Virtual Environment
+venv/
+env/
+.venv/
+.env/
+
+# IDE Specific Files
+.vscode/
+.idea/
