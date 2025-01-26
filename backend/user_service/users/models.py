@@ -21,6 +21,8 @@ class User(AbstractUser):
     email = EmailField(_("email address"), unique=True)
     phone_number = CharField(_("Phone Number"), blank=False, max_length=255)
     username = None  # type ignore[assignment]
+    is_organizer = models.BooleanField(default=False)  # Role-based.
+    is_customer = models.BooleanField(default=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -35,3 +37,6 @@ class User(AbstractUser):
             str: URL for user detail.
         """
         return reverse("users:detail", kwargs={"pk": self.id})
+
+    def __str__(self) -> EmailField:
+        return self.email
