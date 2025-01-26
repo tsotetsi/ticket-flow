@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+echo "Check if database is ready here, if using it. You can use an if statement..."
+exec "$@"

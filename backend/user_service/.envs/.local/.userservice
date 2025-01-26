@@ -1,0 +1,9 @@
+# General environment variables
+# ---------------------------------------------------------
+USE_DOCKER="yes"
+IPYTHONDIR="/app/.ipython"
+
+DEBUG=1
+SECRET_KEY="django-insecure-abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*"
+DJANGO_ALLOWED_HOSTS=["localhost", "0.0.0.0", "127.0.0.1"]
+DJANGO_SETTINGS_MODULE=config.settings.local

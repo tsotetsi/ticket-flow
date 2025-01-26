@@ -1,0 +1,22 @@
+#!/bin/bash
+# causes script to exit immediately if any command fails.
+set -o errexit
+
+# causes the script to fail if any command in a pipeline fails.
+set -o pipefail
+
+# exit if an unset(undefined) variable is referenced.
+set -o nounset
+
+# NB: You can use a while loop here
+#     to wait for certain services
+#     be available.
+echo "Applying database migrations..."
+python manage.py makemigrations
+
+echo "Migrating migrations..."
+python manage.py migrate
+
+echo "Starting Django development server..."
+exec gunicorn config.wsgi:application --bind 0.0.0.0:8000
+#python manage.py runserver 0.0.0.0:8000

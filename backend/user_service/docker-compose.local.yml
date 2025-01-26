@@ -1,0 +1,12 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/user-service/Dockerfile
+    image: ticket-flow-local-userservice
+    container_name: ticket-flow-local-userservice
+    env_file:
+      - ./.envs/.local/.userservice
+    ports:
+      - '8000:8000'
+    command: /start
