@@ -3,6 +3,7 @@
 Django==5.1.5
 django-cors-headers==4.6.0
 gunicorn==23.0.0
+whitenoise==6.8.2 # serves static files from django(direct)
 
 # Secondary dependencies.
 # ---------------------------------------------------------
