@@ -6,7 +6,7 @@
 * [Python 3.9+](https://www.python.org/downloads/)
 * [Docker](https://docs.docker.com/engine/install/ubuntu/)
 * [Docker Compose](https://docs.docker.com/desktop/setup/install/linux/)
-* [VS Code](https://code.visualstudio.com/download) or [PyCharm](https://code.visualstudio.com/download)
+* [VS Code](https://code.visualstudio.com/download) or [PyCharm](https://www.jetbrains.com/pycharm/download/?section=linux)
 
 ### Installation Steps
 
