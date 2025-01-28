@@ -1,0 +1,7 @@
+# Store env's and sensitive information (like API keys or password).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+data:
+  DJANGO_SETTINGS_MODULE: config.settings.local
