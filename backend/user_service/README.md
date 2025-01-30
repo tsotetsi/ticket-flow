@@ -54,7 +54,7 @@
    docker compose -f docker-compose.local.yml build
    ```
 
-2. Run User-Service
+2. Run User-Service(locally)
    ```bash
    docker compose -f docker-compose.local.yml up
    ```
@@ -62,6 +62,19 @@
 
    Visit your localhost om port 8000: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
+### Build User-Service docker image and publish to registry.
+
+1. Build docker image with a tag(e.g. v1, latest)
+   ```bash
+   docker build --no-cache -t user-service:v1 -f compose/local/user-service/Dockerfile .
+   ```
+2. Push docker image to a Registry 
+   You need to push(`) your image to a container registry so that Kubernetes can access it.
+   ```bash
+   docker login
+   docker tag your-image-name:your-tag your-dockerhub-username/your-image-name:your-tag
+   docker push your-dockerhub-username/your-image-name:your-tag
+   ```
 
 ## Architecture
 - Event-Driven Architecture
