@@ -1,13 +1,11 @@
-# Deployment defines how many pods()containers
-# should run for a service and ensures they stay up
-apiVersion: apps/v1 # v1 typically mean the API is stable and read for production.
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-service
   labels:
     app: user-service
 spec:
-  replicas: 3 # number of instances (Pods) for scalability..
+  replicas: 1
   selector:
     matchLabels:
       app: user-service
@@ -18,11 +16,14 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: tsotetsi/ticketflow-user-service:v1
+          image: tsotetsi/ticketflow-user-service:v1.0.1
+          imagePullPolicy: Always
           ports:
-            - containerPort: 8000 # Port the app listens on.
+            - containerPort: 8000
           envFrom:
             - configMapRef:
                 name: user-service-config
             - secretRef:
                 name: user-service-secrets
+          livenessProbe: null
+          readinessProbe: null

@@ -7,17 +7,6 @@ FROM python AS python-build-stage
 # Defines a build-time variable.
 ARG BUILD_ENVIRONMENT=local
 
-# Requirements are installed here to ensure they will be cached.
-# Copies all the contents of the requirements folder.
-COPY ./requirements .
-
-# Create Python Dependency and Sub-Dependency wheels(pre-compiled binaries).
-# It's faster to instal dependencies when using wheels.
-RUN pip wheel --wheel-dir /usr/src/app/wheels -r ${BUILD_ENVIRONMENT}.txt
-
-# Python 'run' stage.
-FROM python AS python-run-stage
-
 ARG APP_HOME=/app
 
 # Set env variables.
@@ -30,6 +19,16 @@ ENV BUILD_ENV=${BUILD_ENVIRONMENT}
 
 # Set working directory.
 WORKDIR ${APP_HOME}
+# Requirements are installed here to ensure they will be cached.
+# Copies all the contents of the requirements folder.
+COPY ./requirements .
+
+# Create Python Dependency and Sub-Dependency wheels(pre-compiled binaries).
+# It's faster to instal dependencies when using wheels.
+RUN pip wheel --wheel-dir /usr/src/app/wheels -r ${BUILD_ENVIRONMENT}.txt
+
+# Python 'run' stage.
+FROM python AS python-run-stage
 
 # Install required system dependencies.
 # 'wait-for-it' -> script used to wait for a service to become available
@@ -62,8 +61,8 @@ RUN chmod +x /start
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
   && rm -rf /wheels/
 
-# Install dependencies.
-RUN pip install --upgrade pip
+## Install dependencies.
+#RUN pip install --upgrade pip
 
 # copy application code to WORKDIR
 COPY . ${APP_HOME}

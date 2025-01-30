@@ -4,5 +4,9 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-echo "Check if database is ready here, if using it. You can use an if statement..."
+echo "Check if database is ready here, if using it. You can use an if statement."
+echo "Testing for changes.."
 exec "$@"
+# Add debug output
+echo "Current working directory: $(pwd)"
+echo "Python version: $(python --version)"
