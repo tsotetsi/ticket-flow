@@ -51,7 +51,7 @@
 
 1. Build User-Service first
    ```bash
-   docker compose -f docker-compose.local.yml build
+   docker compose -f  docker-compose.local.yml build
    ```
 
 2. Run User-Service(locally)
@@ -66,7 +66,7 @@
 
 1. Build docker image with a tag(e.g. v1, latest)
    ```bash
-   docker build --no-cache -t user-service:v1 -f compose/local/user-service/Dockerfile .
+   docker build --no-cache -t ticketflow-user-service:v1 -f compose/local/user-service/Dockerfile .
    ```
 2. Push docker image to a Registry 
    You need to push(`) your image to a container registry so that Kubernetes can access it.

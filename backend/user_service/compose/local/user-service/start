@@ -6,7 +6,7 @@ set -o pipefail
 # exit if an unset(undefined) variable is referenced.
 set -o nounset
 
-# Add debug output
+# Add simple debug output messages.
 echo "Current working directory: $(pwd)"
 echo "Python version: $(python --version)"
 # NB: You can use a while loop here
@@ -21,7 +21,7 @@ python manage.py makemigrations || {
 
 echo "Applying database migrations..."
 python manage.py migrate || {
-    echo "Database migration failed"
+    echo "Database migration failed..."
     exit 1
 }
 # Dockerized env or production needs this. Otherwise your

@@ -1,10 +1,10 @@
 services:
-  django:
+  user-service:
     build:
       context: .
       dockerfile: ./compose/local/user-service/Dockerfile
-    image: ticket-flow-local-userservice
-    container_name: ticket-flow-local-userservice
+    image: tsotetsi/ticketflow-user-service:v1.0.0.alpha
+    container_name: ticketflow-local-userservice
     env_file:
       - ./.envs/.local/.userservice
     ports:
