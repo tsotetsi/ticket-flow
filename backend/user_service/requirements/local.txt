@@ -1,1 +1,31 @@
 -r production.txt
+
+# Fixes issue with deprecated sqlite3 version.
+pysqlite3-binary==0.5.4
+
+# Django.
+# ------------------------------------------------------------------------------
+
+pytest-django==4.9.0
+django-debug-toolbar==5.0.1
+
+# Testing.
+# -----------------------------------------------------------------------------
+pytest==8.3.4
+factory-boy==3.3.1  # https://github.com/FactoryBoy/factory_boy
+
+# Code quality.
+# -----------------------------------------------------------------------------
+coverage==7.6.10
+ruff==0.9.4
+django-coverage-plugin==3.1.0
+
+# Secondary dependencies.
+# -----------------------------------------------------------------------------
+exceptiongroup==1.2.2
+Faker==35.2.0
+iniconfig==2.0.0
+pluggy==1.5.0
+python-dateutil==2.9.0.post0
+six==1.17.0
+tomli==2.2.1
