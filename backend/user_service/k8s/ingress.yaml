@@ -11,6 +11,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: user-service
+            name: ticketflow-user-service
             port:
               number: 80
