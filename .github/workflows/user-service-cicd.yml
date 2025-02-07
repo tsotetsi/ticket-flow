@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Run command in a specific directory
       run: |
-        docker compose -f docker-compose.local.yml build user-service
+        cd /home/runner/work/ticket-flow/ticket-flow/
         ls ./
         ls -al
         ls -la
