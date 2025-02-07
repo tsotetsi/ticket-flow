@@ -1,0 +1,21 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0 # revision you want to point at.
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-json
+      - id: pretty-format-json
+      - id: check-case-conflict
+      - id: detect-private-key
+
+-   repo: https://github.com/adamchainz/django-upgrade
+    rev: '1.22.1'
+    hooks:
+      - id: django-upgrade
+        args: ['--target-version', '5.0']
+
+-   repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+    -   id: black
