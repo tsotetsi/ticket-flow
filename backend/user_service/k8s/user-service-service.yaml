@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketflow-user-service
+spec:
+  selector:
+    app: ticketflow-user-service
+  ports:
+    - protocol: TCP
+      port: 80 # Port the service exposes.
+      targetPort: 8000 # Port your app listens to.
+      nodePort: 30080 # Choose a port in the range 30000-32767
+  type: NodePort # Internal access within the cluster.

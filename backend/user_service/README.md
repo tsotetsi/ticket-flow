@@ -51,10 +51,10 @@
 
 1. Build User-Service first
    ```bash
-   docker compose -f docker-compose.local.yml build
+   docker compose -f  docker-compose.local.yml build --no-cache
    ```
 
-2. Run User-Service
+2. Run User-Service(locally)
    ```bash
    docker compose -f docker-compose.local.yml up
    ```
@@ -62,8 +62,44 @@
 
    Visit your localhost om port 8000: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
+### Build User-Service docker image and publish to registry.
+
+1. Tag(e.g. v1, latest) built image from the previous step.
+   ```bash
+    docker tag tsotetsi/ticketflow-user-service:v1.0.0.alpha tsotetsi/ticketflow-user-service:v1.0.0.alpha
+   ```
+2. Push docker image to a Registry(docker).
+   You need to push your image to a container registry so that Kubernetes can access it.
+   ```bash
+   docker login
+   docker tag your-image-name:your-tag your-dockerhub-username/your-image-name:your-tag
+   docker push your-dockerhub-username/your-image-name:your-tag
+   ------
+   e.g.: docker push tsotetsi/ticketflow-user-service:v1.0.0.alpha
+   ```
+
+### Deploy to kubernetes(minikube).
+
+1. Apply deployment configuration files.
+   ```bash
+   kubectl apply -f /k8s
+   ```
+2. Check if the pods were created successfully.
+   ```bash
+   kubectl get pods
+   ```
+3. Check the logs if there are any issues.
+   ```bash
+   kubectl logs <pod-name>
+   ```
+4. To restart deployment after updating files(no downtime)
+   ```bash
+   kubectl rollout restart
+   ```
 
 ## Architecture
 - Event-Driven Architecture
 - Microservices Architecture
-- Python-based User Service
+- Python-based User Services
+- Canary Deployments
+- API Gateway(MicroService)

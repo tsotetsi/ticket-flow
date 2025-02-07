@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketflow-user-service
+  labels:
+    app: ticketflow-user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketflow-user-service
+  template:
+    metadata:
+      labels:
+        app: ticketflow-user-service
+    spec:
+      containers:
+        - name: ticketflow-user-service
+          image: tsotetsi/ticketflow-user-service:v1.0.0.alpha
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: user-service-config
+            - secretRef:
+                name: user-service-secrets
+          command: ["/start"]

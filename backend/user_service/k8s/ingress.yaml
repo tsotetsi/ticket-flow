@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ticketflow-ingress
+spec:
+  rules:
+  - host: user.ticketflow.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ticketflow-user-service
+            port:
+              number: 80
