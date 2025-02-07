@@ -16,6 +16,10 @@ jobs:
         python-version: [3.11, 3.12]
 
     steps:
+    - name: Run command in a specific directory
+      run: |
+        ls -la
+        pwd  
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
