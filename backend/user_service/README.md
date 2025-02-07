@@ -100,4 +100,6 @@
 ## Architecture
 - Event-Driven Architecture
 - Microservices Architecture
-- Python-based User Service
+- Python-based User Services
+- Canary Deployments
+- API Gateway(MicroService)
