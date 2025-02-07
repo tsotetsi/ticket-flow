@@ -19,6 +19,7 @@ jobs:
     - name: Run command in a specific directory
       run: |
         cd /home/runner/work/ticket-flow/ticket-flow/
+        ls -al /home/runner/work/ticket-flow
         ls ./
         ls -al
         ls -la
