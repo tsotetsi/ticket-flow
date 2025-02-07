@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Run command in a specific directory
       run: |
-        cd backend/
+        ls ./
         ls -al
         ls -la
         pwd
