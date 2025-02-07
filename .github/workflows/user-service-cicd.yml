@@ -19,8 +19,9 @@ jobs:
     - name: Run command in a specific directory
       working-directory: ./backend/user_service/
       run: |
+        ls -al
         ls -la
-        pwdons/checkout@v4
+        pwd
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
