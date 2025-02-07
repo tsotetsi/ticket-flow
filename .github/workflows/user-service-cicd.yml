@@ -17,7 +17,6 @@ jobs:
 
     steps:
     - name: Run command in a specific directory
-      working-directory: ./backend/user_service/
       run: |
         ls -al
         ls -la
