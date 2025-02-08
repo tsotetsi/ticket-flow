@@ -30,6 +30,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "drf_spectacular",
+    "drf_spectacular_sidecar",
 ]
 
 LOCAL_APPS = [
@@ -159,9 +160,14 @@ CORS_ORIGIN_ALLOW_ALL = True  # For development only; restrict in production.
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "TicketFlow Platform API.",
-    "DESCRIPTION": "Documentation of API endpoints of TicketFloe Platform.",
-    "VERSION": "1.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
-    "SCHEMA_PATH_PREFIX": "/api/",
+    'TITLE': 'TicketFlow Platform API',
+    'DESCRIPTION': 'Documentation of API endpoints(UserService) of TicketFloe Platform.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,  # Disable schema serving if not needed
+    'SCHEMA_PATH_PREFIX': '/api/',  # Optional: Prefix for schema paths
+    'COMPONENT_SPLIT_REQUEST': True,  # Split request/response components
+
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
 }
