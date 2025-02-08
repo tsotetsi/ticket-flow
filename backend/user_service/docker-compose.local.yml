@@ -7,7 +7,7 @@ services:
     image: postgres:latest
     container_name: user_service_postgres_db
     env_file:
-      - ./.envs/.local/postgres
+      - ./.envs/.local/.postgres
     volumes:
       - userservice_local_postgres_data:/var/lib/postgresql/data
     ports:
