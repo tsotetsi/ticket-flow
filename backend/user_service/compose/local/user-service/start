@@ -12,10 +12,17 @@ echo "Python version: $(python --version)"
 # NB: You can use a while loop here
 #     to wait for certain services
 #     be available.
+
+# Check for any django related issues.
+echo "Checking django related issues..."
+python manage.py check || {
+  echo "Checking django related issues failed..."
+  exit 1
+}
 # Database migrations with error checking
 echo "Checking database migrations..."
 python manage.py makemigrations || {
-    echo "Migration preparation failed"
+    echo "Migration preparation failed..."
     exit 1
 }
 
@@ -38,4 +45,3 @@ exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 \
     --log-level=info \
     --log-file=- \
     --capture-output
-#python manage.py runserver 0.0.0.0:8000

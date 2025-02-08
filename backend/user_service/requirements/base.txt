@@ -5,6 +5,7 @@ django-cors-headers==4.6.0
 gunicorn==23.0.0
 whitenoise==6.8.2 # serves static files from django(direct)
 pre_commit==4.1.0
+psycopg2-binary==2.9.10 # PostgreSQL Driver for Django
 # Secondary dependencies.
 # ---------------------------------------------------------
 asgiref==3.8.1

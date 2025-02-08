@@ -1,17 +1,19 @@
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-thdv&w5!x!cx0kb+iu3yym_(u4_vqb+jzrd5i5r#%2x19q63nh'
+USER_SERVICE_ENV_PATH = os.path.join(BASE_DIR, '.envs', '.local', '.userservice')
+POSTGRES_ENV_PATH = os.path.join(BASE_DIR, '.envs', '.local', '.postgres')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+load_dotenv(USER_SERVICE_ENV_PATH)
+load_dotenv(POSTGRES_ENV_PATH)
 
 # TicketFlow Application definition.
 
@@ -70,7 +72,7 @@ TEMPLATES = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
+    # Needed to log in by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
@@ -82,13 +84,17 @@ LOGIN_URL = "account_login"
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# DATABASES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB", "user_service_db"),
+        "USER": os.getenv("POSTGRES_USER", "user_dev_local"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "@changeMe1234"),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
