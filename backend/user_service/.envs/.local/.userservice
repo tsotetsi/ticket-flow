@@ -5,5 +5,4 @@ IPYTHONDIR="/app/.ipython"
 
 DEBUG=1
 SECRET_KEY="django-insecure-abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*"
-DJANGO_ALLOWED_HOSTS=["*"]
 DJANGO_SETTINGS_MODULE=config.settings.local

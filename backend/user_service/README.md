@@ -29,6 +29,21 @@
    - Install VS Code or PyCharm
    - Install Python extension
 
+4. **PostgreSQL**
+   - Install PostgreSQL from official site
+   - Create user and set the password
+   ```bash
+   # Use postgres user to create new user, depending on your setup.
+   psql -U postgres -h localhost
+   ```
+   ```sql
+   CREATE USER user_dev_local WITH PASSWORD 'your_password';
+   ALTER ROLE user_dev_local CREATEDB; -- Optional: Use can create databases.
+   CREATE DATABASE user_dev_local;
+   GRANT ALL PRIVILEGES ON DATABASE user_dev_local TO user_dev_local;
+   psql -U user_dev_local -d your_password -h localhost
+   ```
+
 ### Local Development
 
 1. Clone Repository
@@ -96,7 +111,21 @@
    ```bash
    kubectl rollout restart
    ```
-
+5. Connect to PostGreSQL inside the Pod
+   ```bash
+   kubectl exec -it postgres-c8c4f79bf-jkgbz -- /bin/bash
+   root@postgres-c8c4f79bf-jkgbz:/#  # No you are inside postgresql.
+   psql -U user_dev_local -d user_service_db
+   psql (14.15 (Debian 14.15-1.pgdg120+1)) # This means the instance is working.
+   ...
+   ```
+6. Other ways to check for services.
+   ```bash
+   apt update && apt install -y iputils-ping
+   ping postgres
+   telnet postgres 5432
+   nc -vz postgres 5432
+   ```
 ## Architecture
 - Event-Driven Architecture
 - Microservices Architecture

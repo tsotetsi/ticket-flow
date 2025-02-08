@@ -1,13 +1,13 @@
 # POSTGRESQL DEV DATABASE
 # ---------------------------------------------------------
-POSTGRES_HOST=postgres
+POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
-POSTGRES_DB=user_service
-POSTGRES_USER=dev
+POSTGRES_DB=user_service_db
+POSTGRES_USER=user_dev_local
 POSTGRES_PASSWORD=@changeMe1234
 
 # POSTGRESQL TEST DATABASE
 # ---------------------------------------------------------
 POSTGRES_DB_TEST=user_service_test
 POSTGRES_USER_TEST=postgres
-POSTGRES_PASSWORD_TEST=@changeMe1234
+POSTGRES_PASSWORD_TEST=@changeMe123

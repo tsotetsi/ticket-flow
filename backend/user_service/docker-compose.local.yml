@@ -1,5 +1,26 @@
+volumes:
+  userservice_local_postgres_data: {}
+  userservice_local_postgres_data_backups: {}
+
 services:
+  postgres-service:
+    image: postgres:latest
+    container_name: user_service_postgres_db
+    env_file:
+      - ./.envs/.local/.postgres
+    volumes:
+      - userservice_local_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5431:5431" # I have local instance postgres running.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_dev_local -d user_service_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   user-service:
+    depends_on:
+      - postgres-service
     build:
       context: .
       dockerfile: ./compose/local/user-service/Dockerfile
