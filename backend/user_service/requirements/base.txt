@@ -35,3 +35,4 @@ virtualenv==20.29.1
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.4.0
 drf-spectacular==0.28.0
+drf-spectacular-sidecar==2025.2.1
