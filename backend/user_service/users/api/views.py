@@ -60,7 +60,6 @@ class UserProfileView(APIView):
     @method_decorator(cache_page(60 * 60))
     def get(self, request):
         serializer = UserSerializer(request.user)
-        #import pdb;pdb.set_trace()
         return Response(serializer.data)
 
     def put(self, request):

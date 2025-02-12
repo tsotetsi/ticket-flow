@@ -18,9 +18,16 @@ services:
       timeout: 5s
       retries: 5
 
+  redis-service:
+    image: redis:latest
+    container_name: user_service_redis_db
+    ports:
+      - "6379:6379"
+
   user-service:
     depends_on:
       - postgres-service
+      - redis-service
     build:
       context: .
       dockerfile: ./compose/local/user-service/Dockerfile
