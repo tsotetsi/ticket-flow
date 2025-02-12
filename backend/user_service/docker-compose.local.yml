@@ -24,10 +24,28 @@ services:
     ports:
       - "6379:6379"
 
+  prometheus-service:
+    image: pro/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - user-service
+
+  grafana-service:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus-service
   user-service:
     depends_on:
       - postgres-service
       - redis-service
+      - prometheus-service
     build:
       context: .
       dockerfile: ./compose/local/user-service/Dockerfile

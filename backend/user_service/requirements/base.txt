@@ -7,6 +7,7 @@ whitenoise==6.8.2 # serves static files from django(direct)
 pre_commit==4.1.0
 psycopg2-binary==2.9.10 # PostgreSQL Driver for Django
 python-dotenv==1.0.1 # Manages env variables
+django-prometheus==2.3.1 # Exposes metrics from django app
 django-redis==5.4.0 # Integrates django with redis
 # Secondary dependencies.
 # ---------------------------------------------------------
@@ -25,6 +26,7 @@ jsonschema-specifications==2024.10.1
 packaging==24.2
 pyjwt==2.10.1
 PyYAML==6.0.2
+prometheus-client==0.21.1
 redis==5.2.1
 referencing==0.36.2
 rpds-py==0.22.3

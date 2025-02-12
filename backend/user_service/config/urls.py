@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django_prometheus import exports
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
@@ -32,6 +33,10 @@ urlpatterns += [
 
     # Optional: ReDoc
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+]
+
+urlpatterns += [
+    path('metrics/', exports.ExportToDjangoView, name='prometheus-django-metrics'),
 ]
 
 # Serve static files directly if we are in development.
