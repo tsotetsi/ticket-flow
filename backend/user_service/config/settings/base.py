@@ -108,6 +108,19 @@ DATABASES = {
     }
 }
 
+# CACHES
+# -----------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/5.1/topics/cache/
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # Use the Redis service name from docker-compose
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
