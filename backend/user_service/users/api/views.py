@@ -1,3 +1,5 @@
+import uuid
+
 from drf_spectacular.utils import extend_schema
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
@@ -20,7 +22,7 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
     lookup_field = "pk"
 
     def get_queryset(self, *args, **kwargs):
-        assert isinstance(self.request.user.id, int)
+        assert isinstance(self.request.user.id, uuid.UUID)
         return self.queryset.filter(id=self.request.user.id)
 
     @action(detail=False)
