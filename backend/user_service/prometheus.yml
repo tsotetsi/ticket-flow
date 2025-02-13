@@ -2,6 +2,6 @@ global:
   scrape_interval: 15s # How often to scrape metrics.
 
 scrape_configs:
-  - job_name: 'django'
+  - job_name: 'ticket-flow-userservice-django'
     static_configs:
       - targets: ['user-service:8000']

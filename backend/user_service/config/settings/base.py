@@ -106,7 +106,7 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB", "user_service_db"),
         "USER": os.getenv("POSTGRES_USER", "user_dev_local"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "@changeMe1234"),
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "HOST": os.getenv("POSTGRES_HOST", "postgres-service"),
         "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
@@ -117,7 +117,7 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",  # Use the Redis service name from docker-compose
+        "LOCATION": "redis://redis-service:6379/1",  # Use the Redis service name from docker-compose
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
