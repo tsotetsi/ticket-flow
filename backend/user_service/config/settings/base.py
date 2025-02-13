@@ -29,7 +29,10 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
+    "corsheaders",
+    "django_prometheus",
     "drf_spectacular",
+    "drf_spectacular_sidecar",
 ]
 
 LOCAL_APPS = [
@@ -40,7 +43,9 @@ LOCAL_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', # servers static files directly from Django in production.
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +53,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
+]
+
+# Allow resources(e.g. JS) be be accessed by other domains.
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000", # NextJS client.
+    "http://tf.io",
+    "https://tf.io"
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -93,8 +106,21 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB", "user_service_db"),
         "USER": os.getenv("POSTGRES_USER", "user_dev_local"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "@changeMe1234"),
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "HOST": os.getenv("POSTGRES_HOST", "postgres-service"),
         "PORT": os.getenv("POSTGRES_PORT", "5432"),
+    }
+}
+
+# CACHES
+# -----------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/5.1/topics/cache/
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis-service:6379/1",  # Use the Redis service name from docker-compose
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
@@ -159,9 +185,14 @@ CORS_ORIGIN_ALLOW_ALL = True  # For development only; restrict in production.
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "TicketFlow Platform API.",
-    "DESCRIPTION": "Documentation of API endpoints of TicketFloe Platform.",
-    "VERSION": "1.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
-    "SCHEMA_PATH_PREFIX": "/api/",
+    'TITLE': 'TicketFlow Platform API',
+    'DESCRIPTION': 'Documentation of API endpoints(UserService) of TicketFloe Platform.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,  # Disable schema serving if not needed
+    'SCHEMA_PATH_PREFIX': '/api/',  # Optional: Prefix for schema paths
+    'COMPONENT_SPLIT_REQUEST': True,  # Split request/response components
+
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
 }

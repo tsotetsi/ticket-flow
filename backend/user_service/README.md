@@ -43,7 +43,8 @@
    GRANT ALL PRIVILEGES ON DATABASE user_dev_local TO user_dev_local;
    psql -U user_dev_local -d your_password -h localhost
    ```
-
+5. **Redis**
+   - Install redis from official [site]()https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-linux/.
 ### Local Development
 
 1. Clone Repository
@@ -126,6 +127,16 @@
    telnet postgres 5432
    nc -vz postgres 5432
    ```
+7. Accessing the API UI.
+   - [swagger-ui](http://127.0.0.1:8000/api/schema/swagger-ui/)
+   - [redo](http://127.0.0.1:8000/api/schema/redoc/)
+
+### Prometheus and Grafana.
+1. Access Prometheus at http://localhost:9090 and check 
+   the "Targets" section to ensure your Django application is being scraped.
+
+2. Access Grafana at http://localhost:3000 and set up Prometheus as a data source to visualize metrics.
+
 ## Architecture
 - Event-Driven Architecture
 - Microservices Architecture

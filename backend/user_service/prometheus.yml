@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s # How often to scrape metrics.
+
+scrape_configs:
+  - job_name: 'ticket-flow-userservice-django'
+    static_configs:
+      - targets: ['user-service:8000'] # Django app metrics.
+
+  - job_name: 'postgres-service'
+    static_configs:
+      - targets: ['postgres-exporter:9187'] # PostgreSQL metrics.
