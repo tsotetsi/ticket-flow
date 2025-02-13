@@ -2,6 +2,7 @@ volumes:
   userservice_local_postgres_data: {}
   userservice_local_postgres_data_backups: {}
   userservice_local_postgres_initdb: {}
+  userservice_local_grafana_data: {}
 
 services:
   postgres-service:
@@ -12,13 +13,21 @@ services:
     volumes:
       - userservice_local_postgres_data:/var/lib/postgresql/data # Persistent data storage.
       - userservice_local_postgres_initdb:/docker-entrypoint-initdb.d # Mount initialization scripts.
-#    ports:
-#      - "5432:5432" # We have local instance of postgres running.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U user_dev_local -d user_service_db"]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:latest
+    container_name: postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://user_dev_local:@changeMe1234@postgres-service:5432/user_service_db?sslmode=disable"
+    ports:
+      - "9187:9187"
+    depends_on:
+      - postgres-service
 
   redis-service:
     image: redis:latest
@@ -37,14 +46,18 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     depends_on:
       - user-service
+      - postgres-exporter
 
   grafana-service:
     image: grafana/grafana:latest
     container_name: user_service_grafana
     ports:
       - "3000:3000"
+    volumes:
+      - userservice_local_grafana_data:/var/lib/grafana/data
     depends_on:
       - prometheus-service
+
   user-service:
     depends_on:
       - postgres-service
