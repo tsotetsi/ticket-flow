@@ -1,3 +1,4 @@
+from allauth.account.views import confirm_email, email_verification_sent
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -7,7 +8,7 @@ from django_prometheus import exports
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
-from users.api.views import RegisterView, UserProfileView
+from users.api.views import RegisterView, UserProfileView, VerifyEmailView
 
 
 urlpatterns = [
@@ -19,6 +20,9 @@ urlpatterns += [
     # API BASE URL For Authentication JWT.
     path('api/', include("config.api_router")),
     path('api/register', RegisterView.as_view(), name='register'),
+    path('api/verify-email/', VerifyEmailView.as_view(), name='verify_email'),
+    path('api/account-confirm-email/<str:key>/', confirm_email , name='account_confirm_email'),
+    path('api/account-email-verification-sent', email_verification_sent, name='account_email_verification_sent'),
     path('api/profile', UserProfileView.as_view(), name='profile'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

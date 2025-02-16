@@ -1,5 +1,8 @@
 import uuid
+from http.client import responses
 
+from allauth.account.views import ConfirmEmailView
+from allauth.account.utils import complete_signup
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -44,6 +47,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            complete_signup(request, user, 'mandatory', None) # Trigger email verification
             refresh = RefreshToken.for_user(user)
             return Response({
                 'user': RegisterSerializer(user).data,
@@ -51,6 +55,18 @@ class RegisterView(APIView):
                 'access': str(refresh.access_token)
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerifyEmailView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, key):
+        # Use allauth's ConfirmationEmailView to verify the email
+        confirm_email_view = ConfirmEmailView.as_view()
+        response = confirm_email_view(request, key=key)
+        if response.status_code == 302: # Redirect means success
+            return Response({'detail': 'Email verified successfully.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Invalid verification link.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(APIView):
