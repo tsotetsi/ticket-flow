@@ -18,6 +18,7 @@ load_dotenv(POSTGRES_ENV_PATH)
 # TicketFlow Application definition.
 
 DJANGO_APPS = [
+    'django.contrib.sites', # Required for allauth
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -29,6 +30,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
+    "allauth",
+    "allauth.account",
     "corsheaders",
     "django_prometheus",
     "drf_spectacular",
@@ -47,6 +50,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', # servers static files directly from Django in production.
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,6 +91,8 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = [
     # Needed to log in by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
@@ -168,6 +174,20 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# django-allauth
+# -------------------------------------------------------------------------------
+# django-allauth - https://docs.allauth.org/en/dev/headless/openapi-specification/
+SITE_ID = 1 # Required for allauth
+
+# Email/Account authentication settings for verification
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # Ensures email verification
+LOGIN_ON_EMAIL_CONFIRMATION = False
+CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_UNIQUE_EMAIL = True
+
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
@@ -181,6 +201,9 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True  # For development only; restrict in production.
+
+# Email backend (for development) TODO: Use mailpit
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Use console for testing
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings

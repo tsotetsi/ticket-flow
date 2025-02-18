@@ -1,5 +1,14 @@
 import uuid
 
+from allauth.account.views import ConfirmEmailView
+from allauth.account.utils import complete_signup
+from allauth.account.internal import flows
+from allauth.account.models import (
+    get_emailconfirmation_model,
+)
+
+from django.http import Http404
+
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -15,7 +24,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.models import User
 from users.api.serializers import UserSerializer, RegisterSerializer
-
+from config.settings.base import CONFIRM_EMAIL_ON_GET
 
 class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = UserSerializer
@@ -44,6 +53,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            complete_signup(request, user, 'mandatory', None) # Trigger email verification
             refresh = RefreshToken.for_user(user)
             return Response({
                 'user': RegisterSerializer(user).data,
@@ -51,6 +61,38 @@ class RegisterView(APIView):
                 'access': str(refresh.access_token)
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CustomConfirmEmailView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.object = None
+
+    def get_object(self, queryset=None):
+        key = self.kwargs["key"]
+        model = get_emailconfirmation_model()
+        email_confirmation = model.from_key(key)
+        if not email_confirmation:
+            raise Http404()
+        return email_confirmation
+
+    def get(self, *args, **kwargs):
+        if CONFIRM_EMAIL_ON_GET:
+            self.object = verification = self.get_object()
+            response = flows.email_verification.verify_email_indirectly(
+                self.request,
+                verification.email_address.user,
+                verification.email_address.user.email
+            )
+            if response:
+                return  Response({
+                    "detail": "Email verified successfully.",
+                    "data": verification.email_address.user.email
+                },
+                    status=status.HTTP_200_OK)
+        return Response({"detail": "Not accepting GET request on the endpoint"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(APIView):
