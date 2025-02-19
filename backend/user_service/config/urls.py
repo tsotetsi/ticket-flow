@@ -1,4 +1,4 @@
-from allauth.account.views import confirm_email, email_verification_sent
+from allauth.account.views import email_verification_sent, PasswordResetFromKeyView
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -8,7 +8,7 @@ from django_prometheus import exports
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
-from users.api.views import RegisterView, UserProfileView, CustomConfirmEmailView
+from users.api.views import RegisterView, UserProfileView, CustomConfirmEmailView, PasswordResetView, CustomPasswordResetFromKeyView
 
 
 urlpatterns = [
@@ -19,8 +19,10 @@ urlpatterns = [
 urlpatterns += [
     # API BASE URL For Authentication JWT.
     path('api/', include("config.api_router")),
-    path('api/login', RegisterView.as_view(), name='account_login'),
+    #path('api/login', RegisterView.as_view(), name='account_login'), # Delete this.
     path('api/register', RegisterView.as_view(), name='register'),
+    path('api/password/reset/', PasswordResetView.as_view(), name='password_reset'),
+    path('api/password/reset/key/<uidb36>/<key>/', CustomPasswordResetFromKeyView.as_view(), name='account_reset_password_from_key'),
     path('api/account-confirm-email/<str:key>/', CustomConfirmEmailView.as_view() , name='account_confirm_email'),
     path('api/account-email-verification-sent', email_verification_sent, name='account_email_verification_sent'),
     path('api/profile', UserProfileView.as_view(), name='profile'),

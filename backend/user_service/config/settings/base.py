@@ -205,6 +205,9 @@ CORS_ORIGIN_ALLOW_ALL = True  # For development only; restrict in production.
 # Email backend (for development) TODO: Use mailpit
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Use console for testing
 
+ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
+FRONTEND_URL = 'http://localhost:8000/api'
+
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
