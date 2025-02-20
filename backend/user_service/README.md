@@ -78,6 +78,20 @@
 
    Visit your localhost om port 8000: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
+
+### Running tests and test coverage
+
+1. Run tests with pytest.
+   ```bash
+   pytest
+   ```
+2. Run tests, check your test coverage, and generate HTML coverage report.
+   ```bash
+   coverage run --source=. -m pytest
+   coverage html
+   open htmlcov/index.html
+   ```
+
 ### Build User-Service docker image and publish to registry.
 
 1. Tag(e.g. v1, latest) built image from the previous step.
