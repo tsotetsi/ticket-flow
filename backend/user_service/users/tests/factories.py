@@ -15,6 +15,7 @@ from users.models import User
 class UserFactory(DjangoModelFactory[User]):
     email = Faker("email")
     name = Faker("name")
+    phone_number= Faker("phone_number")
 
     @post_generation
     def password(

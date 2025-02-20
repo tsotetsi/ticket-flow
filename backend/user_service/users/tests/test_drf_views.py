@@ -3,6 +3,7 @@ import jwt
 from unittest.mock import patch
 from django.conf import settings
 from django.core import mail
+from django.forms.models import model_to_dict
 from rest_framework.test import APIRequestFactory
 
 from users.models import User
@@ -77,12 +78,23 @@ class TestRegisterView:
         assert decoded_token['user_id'] == response.data['user']['id']
         assert 'exp' in decoded_token  # Ensure expiration claim is present
 
-        # Check that the confirm registration was sent
+        # Check that the confirmation registration email was sent.
         assert len(mail.outbox) == 1
         assert  mail.outbox[0].subject == '[example.com] Please Confirm Your Email Address'
 
     @patch('allauth.account.utils.complete_signup')  # Mock the complete_signup function
     @pytest.mark.django_db
-    def test_user_registration_validation_errors(self, mock_complete_signup, api_client_factory, url_factory, user_registration_factory):
-        pass
-        # TODO: Check for validation errors associated with registration flow.
+    def test_user_registration_validation_errors(self, mock_complete_signup, api_client_factory, url_factory, user_factory):
+        # Pick variables that you only need for registration form.
+        user_exist_data = { k: v for k, v in model_to_dict(user_factory).items() if k in ['name', 'email', 'phone_number', 'password']}
+        response = api_client_factory.post(url_factory('register'), user_exist_data)
+        assert response.status_code == 400
+        assert response.data['email'][0] == 'user with this email address already exists.'
+
+        # Pick data with missing required fields.
+        user_missing_attr = { k: v for k, v in model_to_dict(user_factory).items() if k in ['name']}
+        response = api_client_factory.post(url_factory('register'), user_missing_attr)
+        assert response.status_code == 400
+        assert response.data['email'][0] == 'This field is required.'
+        assert response.data['phone_number'][0] == 'This field is required.'
+        assert response.data['password'][0] == 'This field is required.'
