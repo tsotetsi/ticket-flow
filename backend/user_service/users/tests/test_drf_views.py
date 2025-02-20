@@ -75,3 +75,5 @@ class TestRegisterView:
         # Verify the token payload and is of the correct user.
         assert decoded_token['user_id'] == response.data['user']['id']
         assert 'exp' in decoded_token  # Ensure expiration claim is present
+
+        # TODO; Test validation errors and email notification.
