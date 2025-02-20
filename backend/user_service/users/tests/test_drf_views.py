@@ -2,6 +2,7 @@ import pytest
 import jwt
 from unittest.mock import patch
 from django.conf import settings
+from django.core import mail
 from rest_framework.test import APIRequestFactory
 
 from users.models import User
@@ -76,4 +77,12 @@ class TestRegisterView:
         assert decoded_token['user_id'] == response.data['user']['id']
         assert 'exp' in decoded_token  # Ensure expiration claim is present
 
-        # TODO; Test validation errors and email notification.
+        # Check that the confirm registration was sent
+        assert len(mail.outbox) == 1
+        assert  mail.outbox[0].subject == '[example.com] Please Confirm Your Email Address'
+
+    @patch('allauth.account.utils.complete_signup')  # Mock the complete_signup function
+    @pytest.mark.django_db
+    def test_user_registration_validation_errors(self, mock_complete_signup, api_client_factory, url_factory, user_registration_factory):
+        pass
+        # TODO: Check for validation errors associated with registration flow.
