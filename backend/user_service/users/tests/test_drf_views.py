@@ -82,9 +82,8 @@ class TestRegisterView:
         assert len(mail.outbox) == 1
         assert  mail.outbox[0].subject == '[example.com] Please Confirm Your Email Address'
 
-    @patch('allauth.account.utils.complete_signup')  # Mock the complete_signup function
     @pytest.mark.django_db
-    def test_user_registration_validation_errors(self, mock_complete_signup, api_client_factory, url_factory, user_factory):
+    def test_user_registration_validation_errors(self, api_client_factory, url_factory, user_factory):
         # Pick variables that you only need for registration form.
         user_exist_data = { k: v for k, v in model_to_dict(user_factory).items() if k in ['name', 'email', 'phone_number', 'password']}
         response = api_client_factory.post(url_factory('register'), user_exist_data)
@@ -98,3 +97,33 @@ class TestRegisterView:
         assert response.data['email'][0] == 'This field is required.'
         assert response.data['phone_number'][0] == 'This field is required.'
         assert response.data['password'][0] == 'This field is required.'
+
+
+class TestPasswordResetView:
+    def test_password_reset_url(self, url_factory):
+        password_reset_url = url_factory("password_reset")
+        assert password_reset_url == "/api/password/reset/"
+
+    @pytest.mark.django_db
+    def test_password_reset_link_success(self, api_client_factory, url_factory, user_factory):
+        data = { 'email': 'test.success@success.com'}
+        response = api_client_factory.post(url_factory("password_reset"), data)
+        assert str(response.data['email'][0]) == 'User with this email address does not exist.'
+
+        # Use existing, registered user email
+        data = {"email": model_to_dict(user_factory)['email']}
+        response = api_client_factory.post(url_factory("password_reset"), data)
+        assert response.status_code == 200
+
+        # Check that the reset password email was sent.
+        assert len(mail.outbox) == 1
+        assert mail.outbox[0].to[0] == data['email']
+
+class TestCustomPasswordResetFromKey:
+    def test_custom_reset_password(self, url_factory):
+        pass
+
+
+class TestCustomConfirmEmailView:
+    def test_confirm_email_url(self, url_factory):
+        pass

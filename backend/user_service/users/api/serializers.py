@@ -35,7 +35,7 @@ class PasswordResetSerializer(serializers.Serializer):
     def validate_email(self, value):
         # Check if the email exists in the database.
         if not User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("use with this email address does not exist.")
+            raise serializers.ValidationError("User with this email address does not exist.")
         return value
 
     def save(self, **kwargs):
