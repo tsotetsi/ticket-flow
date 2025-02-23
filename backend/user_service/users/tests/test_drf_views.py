@@ -4,6 +4,7 @@ from unittest.mock import patch
 from django.conf import settings
 from django.core import mail
 from django.forms.models import model_to_dict
+from rest_framework.response import Response
 from rest_framework.test import APIRequestFactory
 
 from users.models import User
@@ -120,7 +121,13 @@ class TestPasswordResetView:
         assert mail.outbox[0].to[0] == data['email']
 
 class TestCustomPasswordResetFromKey:
-    def test_custom_reset_password(self, url_factory):
+
+    @patch('allauth.account.models.get_emailconfirmation_model')
+    @patch('allauth.account.internal.flows.email_verification.verify_email_indirectly', return_value=Response(
+        {"detail": "Email verified successfully."}
+    ))
+    @pytest.mark.django_db
+    def test_custom_reset_password(self, mock_verify_email, mock_get_email_confirmation_model, api_client_factory, url_factory, user_factory):
         pass
 
 
