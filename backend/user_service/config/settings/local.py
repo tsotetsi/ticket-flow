@@ -11,6 +11,16 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'changeMeIfYouSeeThis')
 # TODO: Set static IP address for minikube, minikube start --static=192.168.49.2
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "user-service"]  # noqa: S104
 
+# EMAIL
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-host
+EMAIL_HOST = os.getenv("EMAIL_HOST", default="mailpit")
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-port
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 1025         # Mailpit's SMTP port
+EMAIL_USE_TLS = False     # Mailpit does not use TLS by default
+EMAIL_USE_SSL = False     # Mailpit does not use SSL by default
+
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites

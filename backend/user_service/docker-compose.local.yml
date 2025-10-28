@@ -58,6 +58,21 @@ services:
     depends_on:
       - prometheus-service
 
+  mailpit-service:
+    image: docker.io/axllent/mailpit:latest
+    container_name: user_service_mailpit
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
   user-service:
     depends_on:
       - postgres-service

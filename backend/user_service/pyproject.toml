@@ -11,5 +11,5 @@ python_files = [
 # ==== Coverage ====
 [tool.coverage.run]
 include = ["user_service/**"]
-omit = ["*/migrations/*", "*/tests/*"]
+omit = ["*/migrations/*", "*/tests/*", "*/.venv/*", "*/staticfiles/*", "*/requirements/*"]
 plugins = ["django_coverage_plugin"]
